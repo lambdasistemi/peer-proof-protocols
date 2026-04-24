@@ -39,6 +39,11 @@ Risk level: `Medium`
 This is one of the best non-software candidates in the set. The clean role is a
 peer-side EPCIS toolkit and verifier, not a GS1 conformance body.
 
+## Spec Status
+
+- First PPP feature spec:
+  [GS1 EPCIS Peer Traceability Proofs](https://github.com/lambdasistemi/peer-proof-protocols/blob/main/specs/002-gs1-epcis-peer-traceability/spec.md)
+
 ## Sources
 
 - [EPCIS & CBV | GS1](https://www.gs1.org/standards/epcis)

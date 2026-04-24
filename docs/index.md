@@ -44,3 +44,5 @@ This repository focuses on the second case:
   for the reusable protocol pattern.
 - Use [Fit Rubric](concepts/fit-rubric.md) before spending time on a candidate.
 - Browse [Candidates](candidates/index.md) for concrete targets.
+- Active Spec Kit artifacts live in
+  [specs/](https://github.com/lambdasistemi/peer-proof-protocols/tree/main/specs).
