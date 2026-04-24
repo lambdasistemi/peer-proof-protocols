@@ -10,11 +10,14 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
 jobs:
   build-gate:
     name: Build Gate
     runs-on: nixos
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Stub CI
         run: echo "CI stub - will be replaced by real CI"
