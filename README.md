@@ -61,6 +61,11 @@ Project governance lives in `.specify/memory/constitution.md`.
 - Candidate protocol analyses: `docs/candidates/`
   Start at `docs/candidates/index.md`.
 - Reusable evaluation worksheet: `docs/worksheets/protocol-evaluation-sheet.md`
+- GitHub Pages site:
+  `https://lambdasistemi.github.io/peer-proof-protocols/`
+- Pull request previews:
+  `https://lambdasistemi-peer-proof-protocols-pr-<number>.surge.sh`
+  when `SURGE_TOKEN` is configured for the repository
 
 To preview the documentation locally:
 

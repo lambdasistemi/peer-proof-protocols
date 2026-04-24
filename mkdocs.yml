@@ -1,4 +1,6 @@
 site_name: Peer Proof Protocols
+site_url: https://lambdasistemi.github.io/peer-proof-protocols/
+repo_url: https://github.com/lambdasistemi/peer-proof-protocols
 
 theme:
   name: material
