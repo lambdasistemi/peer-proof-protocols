@@ -45,7 +45,8 @@ jobs:
     steps:
       - name: Preview disabled
         if: env.SURGE_TOKEN == ''
-        run: echo "SURGE_TOKEN is not configured; skipping Surge preview." >> "$GITHUB_STEP_SUMMARY"
+        run: |
+          echo "SURGE_TOKEN is not configured; skipping Surge preview." >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/download-artifact@v4
         if: env.SURGE_TOKEN != ''
         with:
@@ -53,12 +54,13 @@ jobs:
           path: site
       - name: Publish preview
         if: env.SURGE_TOKEN != ''
-        run: >-
-          nix shell nixpkgs#nodePackages.surge --quiet
-          -c sh -lc 'surge ./site "$SURGE_DOMAIN" --token "$SURGE_TOKEN"'
+        run: |
+          nix shell nixpkgs#nodePackages.surge --quiet \
+            -c surge ./site "$SURGE_DOMAIN" --token "$SURGE_TOKEN"
       - name: Preview summary
         if: env.SURGE_TOKEN != ''
-        run: echo "Preview: https://$SURGE_DOMAIN" >> "$GITHUB_STEP_SUMMARY"
+        run: |
+          echo "Preview: https://$SURGE_DOMAIN" >> "$GITHUB_STEP_SUMMARY"
 
   surge-teardown:
     name: Remove Surge Preview
@@ -72,12 +74,13 @@ jobs:
     steps:
       - name: Preview teardown skipped
         if: env.SURGE_TOKEN == ''
-        run: echo "SURGE_TOKEN is not configured; no Surge preview to remove." >> "$GITHUB_STEP_SUMMARY"
+        run: |
+          echo "SURGE_TOKEN is not configured; no Surge preview to remove." >> "$GITHUB_STEP_SUMMARY"
       - name: Remove preview
         if: env.SURGE_TOKEN != ''
-        run: >-
-          nix shell nixpkgs#nodePackages.surge --quiet
-          -c sh -lc 'surge teardown "$SURGE_DOMAIN" --token "$SURGE_TOKEN" || true'
+        run: |
+          nix shell nixpkgs#nodePackages.surge --quiet \
+            -c surge teardown "$SURGE_DOMAIN" --token "$SURGE_TOKEN" || true
 
   pages-artifact:
     name: Package Pages Artifact
