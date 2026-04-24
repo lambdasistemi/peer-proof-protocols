@@ -53,6 +53,9 @@ This repo uses Spec Kit for spec-driven development:
 
 Project governance lives in `.specify/memory/constitution.md`.
 
+Active feature specifications live in `specs/`. The first peer-only PPP spec is
+`specs/002-gs1-epcis-peer-traceability/`.
+
 ## Documentation
 
 - Repository overview: `docs/index.md`
