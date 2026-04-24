@@ -35,6 +35,11 @@ Risk level: `Low`
 This is one of the cleanest places to explore certification facts without
 fighting protocol licensing. It is likely the best software-first candidate.
 
+## Spec Status
+
+- Proposed PPP spec and plan:
+  [in-toto Peer Provenance Proofs](https://github.com/lambdasistemi/peer-proof-protocols/blob/main/specs/003-in-toto-peer-provenance/spec.md)
+
 ## Sources
 
 - [in-toto getting started](https://in-toto.io/docs/getting-started/)
