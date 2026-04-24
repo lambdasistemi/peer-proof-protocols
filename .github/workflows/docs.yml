@@ -50,7 +50,7 @@ jobs:
         if: env.SURGE_TOKEN == ''
         run: |
           echo "SURGE_TOKEN is not configured; skipping Surge preview." >> "$GITHUB_STEP_SUMMARY"
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v8
         if: env.SURGE_TOKEN != ''
         with:
           name: docs-site
@@ -91,7 +91,7 @@ jobs:
     needs: build-docs
     runs-on: nixos
     steps:
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v8
         with:
           name: docs-site
           path: site
