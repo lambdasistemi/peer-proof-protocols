@@ -1,0 +1,94 @@
+openapi: 3.1.0
+info:
+  title: GS1 EPCIS Peer Traceability Verifier API
+  version: ppp.gs1_epcis.traceability_segment.v1
+paths:
+  /api/verify/gs1-epcis-traceability-bundle:
+    post:
+      summary: Verify a traceability proof bundle
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./traceability-proof-bundle.schema.json
+      responses:
+        "200":
+          description: Verification result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VerificationResult"
+        "400":
+          description: Malformed proof bundle
+        "422":
+          description: Well-formed bundle whose claim is unsupported
+  /api/verify/gs1-epcis-certification:
+    post:
+      summary: Verify a certification fact directly or audit through inputs
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [certification, mode]
+              properties:
+                certification:
+                  $ref: ./certification-fact.schema.json
+                mode:
+                  type: string
+                  enum: [trust_certifier, audit_through, mixed]
+                input_bundle:
+                  $ref: ./traceability-proof-bundle.schema.json
+      responses:
+        "200":
+          description: Certification verification result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VerificationResult"
+        "400":
+          description: Malformed certification request
+        "422":
+          description: Audit-through mode requested without required inputs
+components:
+  schemas:
+    VerificationResult:
+      type: object
+      required: [outcome, reason_codes, evaluated_at]
+      properties:
+        outcome:
+          type: string
+          enum: [pass, fail, incomplete, stale, conflicted, unsupported, superseded]
+        reason_codes:
+          type: array
+          items:
+            type: string
+        verified_roots:
+          type: array
+          items:
+            type: object
+            required: [peer_id, root_id]
+            properties:
+              peer_id: { type: string }
+              root_id: { type: string }
+        failed_proofs:
+          type: array
+          items:
+            type: string
+        unsupported_claims:
+          type: array
+          items:
+            type: string
+        stale_inputs:
+          type: array
+          items:
+            type: string
+        conflicts:
+          type: array
+          items:
+            type: string
+        evaluated_at:
+          type: string
+          format: date-time

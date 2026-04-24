@@ -1,0 +1,246 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lambdasistemi.github.io/peer-proof-protocols/contracts/gs1-epcis-traceability-proof-bundle.schema.json",
+  "title": "GS1 EPCIS Traceability Proof Bundle",
+  "type": "object",
+  "required": [
+    "bundle_id",
+    "bundle_version",
+    "claim",
+    "peers",
+    "root_checkpoints",
+    "facts",
+    "inclusion_proofs",
+    "coverage",
+    "created_at"
+  ],
+  "properties": {
+    "bundle_id": { "type": "string", "minLength": 1 },
+    "bundle_version": {
+      "type": "string",
+      "const": "ppp.gs1_epcis.traceability_bundle.v1"
+    },
+    "claim": {
+      "type": "object",
+      "required": [
+        "claim_type",
+        "subject",
+        "required_peers",
+        "policy_id",
+        "policy_version"
+      ],
+      "properties": {
+        "claim_type": {
+          "type": "string",
+          "const": "ppp.gs1_epcis.traceability_segment.v1"
+        },
+        "subject": { "$ref": "#/$defs/subject" },
+        "required_peers": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "policy_id": { "type": "string", "minLength": 1 },
+        "policy_version": { "type": "string", "minLength": 1 },
+        "freshness_requirement": { "type": "string" },
+        "required_negative_claims": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/negative_claim" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "peers": {
+      "type": "array",
+      "minItems": 2,
+      "items": { "$ref": "#/$defs/peer" }
+    },
+    "root_checkpoints": {
+      "type": "array",
+      "minItems": 2,
+      "items": { "$ref": "#/$defs/root_checkpoint" }
+    },
+    "facts": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/fact" }
+    },
+    "inclusion_proofs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/inclusion_proof" }
+    },
+    "exclusion_proofs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/exclusion_proof" },
+      "default": []
+    },
+    "coverage": { "$ref": "#/$defs/coverage" },
+    "certifications": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["certification_id", "bundle_digest"],
+        "properties": {
+          "certification_id": { "type": "string" },
+          "bundle_digest": { "type": "string" }
+        },
+        "additionalProperties": false
+      },
+      "default": []
+    },
+    "created_at": { "type": "string", "format": "date-time" }
+  },
+  "$defs": {
+    "subject": {
+      "type": "object",
+      "required": ["subject_id", "subject_type"],
+      "properties": {
+        "subject_id": { "type": "string", "minLength": 1 },
+        "subject_type": {
+          "type": "string",
+          "enum": ["shipment", "batch", "trade_item", "asset", "document"]
+        },
+        "namespace": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "peer": {
+      "type": "object",
+      "required": ["peer_id", "role", "trust_anchor"],
+      "properties": {
+        "peer_id": { "type": "string", "minLength": 1 },
+        "role": {
+          "type": "string",
+          "enum": ["supplier", "carrier", "warehouse", "receiver", "certifier", "auditor", "other"]
+        },
+        "trust_anchor": { "type": "string", "minLength": 1 },
+        "supported_proof_types": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "root_checkpoint": {
+      "type": "object",
+      "required": [
+        "checkpoint_id",
+        "peer_id",
+        "root_id",
+        "root_value",
+        "root_semantics",
+        "scope",
+        "issued_at",
+        "key_id",
+        "signature"
+      ],
+      "properties": {
+        "checkpoint_id": { "type": "string" },
+        "peer_id": { "type": "string" },
+        "root_id": { "type": "string" },
+        "root_value": { "type": "string" },
+        "root_semantics": {
+          "type": "string",
+          "enum": ["event_history", "active_state", "exclusion_index", "combined"]
+        },
+        "scope": { "type": "object" },
+        "issued_at": { "type": "string", "format": "date-time" },
+        "valid_until": { "type": "string", "format": "date-time" },
+        "key_id": { "type": "string" },
+        "signature": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "fact": {
+      "type": "object",
+      "required": [
+        "fact_id",
+        "fact_type",
+        "canonical_version",
+        "peer_id",
+        "subject",
+        "commitment_time",
+        "payload",
+        "payload_hash"
+      ],
+      "properties": {
+        "fact_id": { "type": "string" },
+        "fact_type": { "type": "string" },
+        "canonical_version": { "type": "string" },
+        "peer_id": { "type": "string" },
+        "subject": { "$ref": "#/$defs/subject" },
+        "event_id": { "type": "string" },
+        "event_time": { "type": "string", "format": "date-time" },
+        "commitment_time": { "type": "string", "format": "date-time" },
+        "biz_step": { "type": "string" },
+        "disposition": { "type": "string" },
+        "status": { "type": "string" },
+        "payload": { "type": "object" },
+        "payload_hash": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "inclusion_proof": {
+      "type": "object",
+      "required": ["proof_type", "fact_id", "leaf_hash", "root_id", "path", "algorithm"],
+      "properties": {
+        "proof_type": { "type": "string", "const": "inclusion" },
+        "fact_id": { "type": "string" },
+        "leaf_hash": { "type": "string" },
+        "root_id": { "type": "string" },
+        "path": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "algorithm": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "exclusion_proof": {
+      "type": "object",
+      "required": ["proof_type", "query_key", "query_scope", "root_id", "algorithm"],
+      "properties": {
+        "proof_type": { "type": "string", "const": "exclusion" },
+        "query_key": { "type": "string" },
+        "query_scope": { "type": "object" },
+        "root_id": { "type": "string" },
+        "neighbor_or_range_evidence": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "algorithm": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "negative_claim": {
+      "type": "object",
+      "required": ["condition_type", "peer_id", "scope"],
+      "properties": {
+        "condition_type": {
+          "type": "string",
+          "enum": ["hold", "recall", "dispute", "rejection", "exception", "revocation"]
+        },
+        "peer_id": { "type": "string" },
+        "scope": { "type": "object" }
+      },
+      "additionalProperties": false
+    },
+    "coverage": {
+      "type": "object",
+      "required": ["subjects", "peer_scopes", "time_range", "limits"],
+      "properties": {
+        "subjects": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/subject" }
+        },
+        "peer_scopes": { "type": "object" },
+        "time_range": { "type": "object" },
+        "limits": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
