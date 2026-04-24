@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://verifiable-receipts.example/contracts/github-approval-receipt-bundle.schema.json",
+  "title": "GitHub Approval Receipt Bundle",
+  "type": "object",
+  "required": [
+    "receipt_id",
+    "receipt_version",
+    "claim",
+    "evidence_root",
+    "facts",
+    "trust_boundary",
+    "signature"
+  ],
+  "properties": {
+    "receipt_id": { "type": "string", "minLength": 1 },
+    "receipt_version": { "type": "string", "const": "github.pr_approval.v1" },
+    "claim": {
+      "type": "object",
+      "required": [
+        "claim_type",
+        "subject",
+        "claim_mode",
+        "classification",
+        "reason_codes",
+        "evaluated_at"
+      ],
+      "properties": {
+        "claim_type": { "type": "string", "const": "github.pr_approval.v1" },
+        "claim_mode": {
+          "type": "string",
+          "enum": ["pre_merge", "post_merge", "combined"]
+        },
+        "classification": {
+          "type": "string",
+          "enum": ["valid", "discrepant", "incomplete"]
+        },
+        "reason_codes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "evaluated_at": { "type": "string", "format": "date-time" },
+        "subject": {
+          "type": "object",
+          "required": ["platform", "host", "owner", "repo", "pull_number", "head_sha"],
+          "properties": {
+            "platform": { "type": "string", "const": "github" },
+            "host": { "type": "string" },
+            "owner": { "type": "string" },
+            "repo": { "type": "string" },
+            "pull_number": { "type": "integer", "minimum": 1 },
+            "base_ref": { "type": "string" },
+            "head_ref": { "type": "string" },
+            "head_sha": { "type": "string" },
+            "merge_commit_sha": { "type": "string" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "evidence_root": {
+      "type": "object",
+      "required": ["algorithm", "root"],
+      "properties": {
+        "algorithm": { "type": "string", "const": "sha256-merkle-v1" },
+        "root": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "facts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["fact_id", "fact_type", "canonical_version", "payload", "payload_hash"],
+        "properties": {
+          "fact_id": { "type": "string" },
+          "fact_type": { "type": "string" },
+          "canonical_version": { "type": "string" },
+          "payload": { "type": "object" },
+          "payload_hash": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "trust_boundary": {
+      "type": "object",
+      "required": ["visibility", "freshness", "remaining_trust"],
+      "properties": {
+        "visibility": { "type": "array", "items": { "type": "string" } },
+        "freshness": { "type": "string" },
+        "remaining_trust": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "signature": {
+      "type": "object",
+      "required": ["algorithm", "key_id", "signature"],
+      "properties": {
+        "algorithm": { "type": "string", "const": "ed25519" },
+        "key_id": { "type": "string" },
+        "signature": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "registry_checkpoint": {
+      "type": "object",
+      "required": ["checkpoint_id", "checkpoint_root"],
+      "properties": {
+        "checkpoint_id": { "type": "string" },
+        "checkpoint_root": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

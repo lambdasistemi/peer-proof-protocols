@@ -1,50 +1,169 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report
+Version change: 3.0.0 -> 3.1.0
+Modified principles:
+- IV. Peer-Carried Proof Bundles -> IV. Peer-Carried Proof Bundles and Certifications
+Modified sections:
+- Composition & Certification
+- Product Scope & Non-Goals
+- Delivery Workflow & Quality Gates
+Templates requiring updates:
+- ✅ updated /code/verifiable-receipts-registry/.specify/templates/plan-template.md
+- ✅ updated /code/verifiable-receipts-registry/.specify/templates/spec-template.md
+- ✅ updated /code/verifiable-receipts-registry/.specify/templates/tasks-template.md
+Follow-up TODOs:
+- Re-home centralized oracle features into a separate repository when they no
+  longer fit this constitution.
+-->
+# Verifiable Receipts Registry Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Peers Before Platforms
+Every feature MUST target a peer protocol in which multiple peers exchange
+claims, acknowledgements, or proofs from their own authenticated state. Product
+surfaces remain in scope, but they are secondary to the peer protocol
+definition. A proposal centered on a centralized oracle, adapter, workflow
+overlay, or coordinator-owned state is out of scope for this repository unless
+it appears only as comparative input or migration context.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. One Peer, One Tree
+Each peer MUST be authoritative only for its own facts and MUST author its own
+Merkle-authenticated state. No peer may rewrite another peer's commitments, and
+no shared root may replace the need for peer-owned roots. Shared outcomes MUST
+be derived from independently authored trees, not from a hidden global truth
+service. Features that do not need peer-owned state continuity SHOULD prefer
+plain signatures and are not good fits for this repository.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Deterministic Peer Commitments
+Every peer-authored fact set MUST reduce to deterministic leaves, roots, and
+proof bundle bytes. Given the same peer inputs, independent implementations
+MUST derive the same commitment material, root transitions, and verification
+results. Specs and plans MUST define ordering, normalization, omission
+handling, versioning, and replay behavior well enough to support golden
+fixtures and reproducible verification.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Peer-Carried Proof Bundles and Certifications
+Protocol messages MUST carry, or deterministically reference, the proofs needed
+for counterparties and external verifiers to validate the claim in question.
+The verifier SHOULD check only the received slices against trusted peer roots
+or published peer checkpoints; rebuilding the full network state is optional,
+not a baseline requirement. Browser, CLI, API, and contract verifiers are
+first-class outputs, not secondary tooling. When a peer derives a higher-order
+claim from verified inputs, that peer MAY promote the result into a new
+certified fact in its own tree, but only if the certification pins the verified
+inputs and rule used to derive it.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. No Privileged Coordinator
+Every feature MUST make coordination optional, narrow, and non-authoritative.
+Witnesses, relays, settlement layers, or publication channels may order, relay,
+timestamp, or escrow, but they MUST NOT decide semantic truth for peer-owned
+facts and MUST NOT own the only Merkle tree that matters. Hidden coordinator
+trust is a protocol bug, not a documentation detail.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+## Product Scope & Non-Goals
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+The primary repository outputs are protocol specifications, peer models,
+canonical schemas, proof bundle formats, verifier rules, and reference flows
+for MPF/MPFS-native peer applications in which each peer authors its own tree.
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+Non-goals for the first product generations:
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+- centralized SaaS overlay products, single-oracle adapters, or coordinator
+  services as primary outputs
+- protocols where detached signatures are already sufficient and authenticated
+  state continuity adds no material value
+- allowing a coordinator, witness, marketplace, or registry to own or rewrite
+  peer state
+- designing polished application UX before the protocol, peer model, and
+  proof flow are legible
+
+Each feature SHOULD deliver one high-value, legible shared claim first, such as
+milestone payable, custody transferred, build provenance complete, or
+credential valid, before broadening scope.
+
+## Composition & Certification
+
+Composition in this repository is semantic and attestational, not assumed proof
+compression. A feature MAY define a certification ladder in which:
+
+- base facts are disclosed with proofs
+- a peer verifies those proofs and applies an explicit predicate or policy
+- the peer publishes the derived result as a new certified fact in its own tree
+
+When a feature introduces certified derived facts, it MUST define the minimum
+certification payload:
+
+- subject identifier
+- rule or policy identifier and version
+- result or classification
+- input bundle digest or canonical input set digest
+- input roots, checkpoints, or equivalent trusted commitment references
+- certifier identity
+- certification time or epoch
+
+The feature MUST also define the downstream verification mode:
+
+- `trust certifier`: downstream users verify the certification fact and the
+  certifier's root only
+- `audit through`: downstream users can traverse from the certification to the
+  referenced input bundle and re-check the underlying proofs
+- `mixed`: both paths are supported, with the weaker path explicitly disclosed
+
+Certified facts are useful only when they remain traceable to verified inputs.
+An unpinned “all good” statement is not a valid composition artifact.
+
+## Delivery Workflow & Quality Gates
+
+All work MUST start with Spec Kit artifacts. The specification defines the user
+story, peers, and protocol problem; the plan defines peer-owned state,
+commitment derivation, proof flow, and verification path; implementation
+follows only after those artifacts pass review.
+
+Before implementation begins, every plan MUST pass these gates:
+
+- it names at least two peers with disjoint fact authority
+- it defines what each peer owns, signs, publishes, and proves
+- it defines each peer's root lifecycle and proof publication model
+- it explains why Merkle-authenticated state adds value beyond plain message
+  signatures
+- it specifies the proof bundle exchanged, the shared claim being evaluated,
+  and the verifier's partial-verification path
+- if derived facts are introduced, it defines the certification payload, rule
+  identifier, and downstream audit model
+- it documents any witness, relay, or settlement assumptions as narrow,
+  non-authoritative dependencies
+- it documents freshness limits, dispute handling, and degraded modes
+- it includes golden fixture coverage and negative verification cases for
+  multi-peer proof bundles and root transitions
+
+A feature is not done until repository docs show how an external verifier can
+reproduce at least one representative cross-peer claim independently from
+exported proofs and documented trust inputs.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This constitution overrides local habits, convenience shortcuts, and implicit
+team norms for this repository.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+Amendment rules:
+
+- amendments MUST be made through a documented change to this file
+- any amendment that changes a principle or adds a new governing section MUST
+  update affected templates in `.specify/templates/`
+- every amendment MUST include a semantic version bump rationale
+
+Versioning policy:
+
+- MAJOR: removes or redefines a principle in a backward-incompatible way
+- MINOR: adds a principle, a mandatory gate, or a new governing section
+- PATCH: clarifies wording without changing meaning
+
+Compliance expectations:
+
+- every feature plan MUST include an explicit constitution check
+- every task list that changes trust claims, canonicalization, or proof bundle
+  formats MUST include deterministic fixture and verification work
+- exceptions MUST be written down, time-boxed, and approved before work starts
+
+**Version**: 3.1.0 | **Ratified**: 2026-04-23 | **Last Amended**: 2026-04-24

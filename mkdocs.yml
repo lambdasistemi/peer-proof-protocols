@@ -1,0 +1,81 @@
+site_name: Peer Proof Protocols
+
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: teal
+      accent: amber
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: teal
+      accent: amber
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.indexes
+    - navigation.sections
+    - navigation.path
+    - toc.integrate
+    - content.code.copy
+
+plugins:
+  - search
+
+markdown_extensions:
+  - admonition
+  - tables
+  - footnotes
+  - def_list
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+nav:
+  - Home: index.md
+  - Concepts:
+      - Why Signed State: concepts/why-signed-state.md
+      - Inclusion, Exclusion, Completeness: concepts/inclusion-exclusion-completeness.md
+      - Composition and Certification: concepts/composition-and-certification.md
+      - Trust Model: concepts/trust-model.md
+      - Fit Rubric: concepts/fit-rubric.md
+  - Patterns:
+      - Base Facts and Proof Bundles: patterns/base-facts-and-proof-bundles.md
+      - Certification Facts: patterns/certification-facts.md
+      - Audit Through vs Trust Certifier: patterns/audit-through-vs-trust-certifier.md
+  - Candidates:
+      - Overview: candidates/index.md
+      - Supply Chain and Trade:
+          - GS1 EPCIS: candidates/gs1-epcis/index.md
+          - DCSA Track and Trace: candidates/dcsa-track-and-trace/index.md
+          - DCSA Bill of Lading: candidates/dcsa-bill-of-lading/index.md
+          - Peppol Post-Award: candidates/peppol-post-award/index.md
+          - Peppol Pre-Award: candidates/peppol-pre-award/index.md
+          - SWIFT Documentary Credits: candidates/swift-documentary-credits/index.md
+      - Software and Credentials:
+          - in-toto: candidates/in-toto/index.md
+          - W3C VC Status Lists: candidates/w3c-vc-status-lists/index.md
+          - OpenID4VC: candidates/openid4vc/index.md
+          - Hyperledger AnonCreds: candidates/hyperledger-anoncreds/index.md
+          - Hyperledger Aries: candidates/hyperledger-aries/index.md
+          - Cardano Governance: candidates/cardano-governance/index.md
+      - Protocol Families:
+          - Compliance Audit-Signoff: candidates/compliance-audit-signoff/index.md
+          - Dispute Resolution: candidates/dispute-resolution/index.md
+  - Worksheets:
+      - Protocol Evaluation Sheet: worksheets/protocol-evaluation-sheet.md

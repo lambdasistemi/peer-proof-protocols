@@ -3,35 +3,70 @@
 **Branch**: `[###-feature-name]` | **Date**: [DATE] | **Spec**: [link]
 **Input**: Feature specification from `/specs/[###-feature-name]/spec.md`
 
-**Note**: This template is filled in by the `/speckit.plan` command. See `.specify/templates/plan-template.md` for the execution workflow.
+**Note**: This template is filled in by the `/speckit.plan` command. See
+`.specify/templates/plan-template.md` for the execution workflow.
+
+## Status
+
+**Completed**: [What is already decided or finished]  
+**Current**: [What phase is in progress]  
+**Blockers**: [Open questions, missing inputs, or "None"]
 
 ## Summary
 
-[Extract from feature spec: primary requirement + technical approach from research]
+[Extract from feature spec: primary requirement + technical approach from
+research]
 
 ## Technical Context
 
-<!--
-  ACTION REQUIRED: Replace the content in this section with the technical details
-  for the project. The structure here is presented in advisory capacity to guide
-  the iteration process.
--->
-
-**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]  
-**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]  
-**Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]  
-**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]  
-**Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
-**Project Type**: [e.g., library/cli/web-service/mobile-app/compiler/desktop-app or NEEDS CLARIFICATION]  
-**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]  
-**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]  
-**Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
+**Protocol / Domain**: [e.g., milestone settlement, custody handoff, build
+provenance]  
+**Peer Set / Roles**: [peers and their responsibilities]  
+**Peer-Owned Facts**: [what each peer commits to and is authoritative for]  
+**Shared Claim / Outcome**: [what cross-peer statement the verifier evaluates]  
+**Proof-Carrying Message**: [portable bundle exchanged between peers or shown
+to verifiers]  
+**Composition Model**: [base facts only, or base facts -> derived claim ->
+certified fact]  
+**Audit Mode**: [trust certifier, audit through, or mixed]  
+**Verification Surface**: [browser, CLI, API, or mixed]  
+**Witness / Publication Layer**: [witnesses, public feeds, settlement layer,
+or N/A]  
+**Merkle Substrate**: [MPF/MPFS model, per-peer namespaces, root publication
+policy]  
+**Implementation Stack**: [languages, runtimes, frameworks or NEEDS
+CLARIFICATION]  
+**Storage / Anchoring**: [peer stores, witness logs, chain anchor, or N/A]  
+**Testing Strategy**: [contract, golden, replay, integration, verifier tests]  
+**Constraints**: [freshness, privacy, offline exchange, peer liveness,
+revocation, dispute windows]  
+**Scale / Scope**: [peers, proofs per claim, root cadence, throughput]
 
 ## Constitution Check
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+- [ ] The feature targets a peer-only protocol, not a centralized oracle or
+      coordinator product.
+- [ ] Peer boundaries are explicit: what each peer authors, signs, stores, and
+      proves is documented.
+- [ ] Each peer has its own root lifecycle and proof publication model.
+- [ ] The design explains why authenticated state and Merkle proofs add value
+      beyond detached signatures.
+- [ ] Canonicalization, ordering, normalization, and versioning are defined
+      well enough to reproduce identical leaves, roots, and proof bundles from
+      identical peer inputs.
+- [ ] A proof-carrying interaction and an independent partial-verification path
+      are defined.
+- [ ] If the feature promotes derived claims into certified facts, the
+      certification payload, policy/rule identifiers, and downstream audit mode
+      are defined.
+- [ ] Any witness, relay, or settlement layer is narrow, passive, and
+      non-authoritative.
+- [ ] Key custody, freshness limits, dispute modes, and degraded behavior are
+      explicitly documented.
+- [ ] Golden fixtures and negative verification cases are planned for each new
+      or changed cross-peer claim.
 
 ## Project Structure
 
@@ -48,47 +83,35 @@ specs/[###-feature]/
 ```
 
 ### Source Code (repository root)
-<!--
-  ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
-  for this feature. Delete unused options and expand the chosen structure with
-  real paths (e.g., apps/admin, packages/something). The delivered plan must
-  not include Option labels.
--->
 
 ```text
-# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
-src/
-├── models/
-├── services/
+protocols/
+├── [protocol]/
+│   ├── rules/
+│   ├── messages/
+│   └── verification/
+peers/
+├── [peer]/
+│   ├── canonical/
+│   ├── proofs/
+│   ├── certifications/
+│   └── publication/
+witnesses/
+├── [component]/
+schemas/
+├── canonical/
+├── bundles/
+└── certifications/
+verifiers/
+├── browser/
 ├── cli/
-└── lib/
-
+└── api/
+docs/
 tests/
 ├── contract/
+├── golden/
 ├── integration/
-└── unit/
-
-# [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
-backend/
-├── src/
-│   ├── models/
-│   ├── services/
-│   └── api/
-└── tests/
-
-frontend/
-├── src/
-│   ├── components/
-│   ├── pages/
-│   └── services/
-└── tests/
-
-# [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
-api/
-└── [same as backend above]
-
-ios/ or android/
-└── [platform-specific structure: feature modules, UI flows, platform tests]
+└── replay/
 ```
 
 **Structure Decision**: [Document the selected structure and reference the real
@@ -100,5 +123,6 @@ directories captured above]
 
 | Violation | Why Needed | Simpler Alternative Rejected Because |
 |-----------|------------|-------------------------------------|
-| [e.g., 4th project] | [current need] | [why 3 projects insufficient] |
-| [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient] |
+| [e.g., coordinator decides peer facts] | [current need] | [why peer-owned state was insufficient] |
+| [e.g., opaque certification with no audit path] | [specific need] | [why pinned inputs and audit-through were infeasible] |
+| [e.g., signatures only, no Merkle state] | [specific blocker] | [why authenticated state continuity is still required] |
