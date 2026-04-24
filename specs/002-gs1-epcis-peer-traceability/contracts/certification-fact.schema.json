@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lambdasistemi.github.io/peer-proof-protocols/contracts/gs1-epcis-certification-fact.schema.json",
+  "title": "GS1 EPCIS Traceability Certification Fact",
+  "type": "object",
+  "required": [
+    "certification_id",
+    "fact_type",
+    "certifier_peer_id",
+    "subject",
+    "policy_id",
+    "policy_version",
+    "result",
+    "input_bundle_digest",
+    "input_root_refs",
+    "verification_mode",
+    "certified_at"
+  ],
+  "properties": {
+    "certification_id": { "type": "string", "minLength": 1 },
+    "fact_type": {
+      "type": "string",
+      "const": "ppp.gs1_epcis.certification.v1"
+    },
+    "certifier_peer_id": { "type": "string", "minLength": 1 },
+    "subject": {
+      "type": "object",
+      "required": ["subject_id", "subject_type"],
+      "properties": {
+        "subject_id": { "type": "string", "minLength": 1 },
+        "subject_type": {
+          "type": "string",
+          "enum": ["shipment", "batch", "trade_item", "asset", "document"]
+        },
+        "namespace": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "policy_id": { "type": "string", "minLength": 1 },
+    "policy_version": { "type": "string", "minLength": 1 },
+    "result": {
+      "type": "string",
+      "enum": ["passed", "failed", "incomplete", "stale", "conflicted", "unsupported"]
+    },
+    "input_bundle_digest": { "type": "string", "minLength": 1 },
+    "input_root_refs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["peer_id", "root_id", "root_value"],
+        "properties": {
+          "peer_id": { "type": "string" },
+          "root_id": { "type": "string" },
+          "root_value": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "input_claim_refs": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": []
+    },
+    "verification_mode": {
+      "type": "string",
+      "enum": ["trust_certifier", "audit_through", "mixed"]
+    },
+    "certified_at": { "type": "string", "format": "date-time" },
+    "signature": {
+      "type": "object",
+      "required": ["algorithm", "key_id", "signature"],
+      "properties": {
+        "algorithm": { "type": "string" },
+        "key_id": { "type": "string" },
+        "signature": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
