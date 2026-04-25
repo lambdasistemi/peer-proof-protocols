@@ -7,6 +7,28 @@ PPP should only move a candidate forward when the candidate has a clear shared
 claim, multiple peers with distinct authority, and a verifier who benefits from
 checking a selective proof bundle.
 
+## Initial Protocol Blueprints
+
+These pages are not implementation specs yet. They are the first concrete
+protocol designs extracted from real-world scenarios and candidate research.
+
+| Blueprint | Scenario | First Shared Claim |
+| --- | --- | --- |
+| [Supply Chain Traceability](supply-chain-traceability.md) | GS1 EPCIS and DCSA-style event traceability | `shipment or item S is traceable under policy P` |
+| [Software Release Provenance](software-release-provenance.md) | in-toto-style build, review, scan, and release evidence | `artifact A is releasable under policy P` |
+| [Credential Status](credential-status.md) | W3C, OpenID4VC, and AnonCreds-style credential validity | `credential C is valid for context K under policy P` |
+| [Milestone Settlement](milestone-settlement.md) | service, procurement, escrow, and audit payment workflows | `milestone M is payable under policy P` |
+
+Each blueprint defines:
+
+- peers and peer-owned facts
+- required positive and negative evidence
+- proof request shape
+- proof bundle contents
+- certification facts
+- infrastructure path
+- verifier outcomes
+
 ## Active Specs
 
 These are the current peer-only feature specs:
@@ -72,4 +94,3 @@ A candidate becomes a spec only when it has:
 
 The spec should then define verifier behavior first. Implementation follows
 only after the proof and trust model are precise enough to test.
-
