@@ -46,6 +46,11 @@ They should not:
 - own the only meaningful state
 - decide semantic truth for peer-owned facts
 
+On-chain root anchoring is the strongest form of publication layer we expect to
+use. It makes peer root publication public, ordered, and durable, but it does
+not make peer-authored facts true by itself. See
+[On-Chain Root Anchoring](on-chain-root-anchoring.md).
+
 ## Certifiers
 
 Certifiers are still peers.
