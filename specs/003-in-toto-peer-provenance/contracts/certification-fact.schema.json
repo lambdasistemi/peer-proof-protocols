@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lambdasistemi.github.io/peer-proof-protocols/contracts/in-toto-certification-fact.schema.json",
+  "title": "in-toto PPP Certification Fact",
+  "type": "object",
+  "required": [
+    "certification_id",
+    "fact_type",
+    "certifier_peer_id",
+    "artifact_subject",
+    "policy_id",
+    "policy_version",
+    "result",
+    "input_bundle_digest",
+    "input_root_refs",
+    "verification_mode",
+    "certified_at"
+  ],
+  "properties": {
+    "certification_id": { "type": "string", "minLength": 1 },
+    "fact_type": {
+      "type": "string",
+      "const": "ppp.in_toto.certification.v1"
+    },
+    "certifier_peer_id": { "type": "string", "minLength": 1 },
+    "artifact_subject": {
+      "type": "object",
+      "required": ["digest"],
+      "properties": {
+        "name": { "type": "string" },
+        "digest": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": { "type": "string" }
+        },
+        "uri": { "type": "string" },
+        "subject_kind": {
+          "type": "string",
+          "enum": ["source", "build_output", "package", "container", "release_asset"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "policy_id": { "type": "string", "minLength": 1 },
+    "policy_version": { "type": "string", "minLength": 1 },
+    "result": {
+      "type": "string",
+      "enum": ["passed", "failed", "incomplete", "stale", "conflicted", "unsupported", "superseded"]
+    },
+    "input_bundle_digest": { "type": "string", "minLength": 1 },
+    "input_root_refs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["peer_id", "root_id", "root_value"],
+        "properties": {
+          "peer_id": { "type": "string" },
+          "root_id": { "type": "string" },
+          "root_value": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "input_claim_refs": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": []
+    },
+    "verification_mode": {
+      "type": "string",
+      "enum": ["trust_certifier", "audit_through", "mixed"]
+    },
+    "certified_at": { "type": "string", "format": "date-time" },
+    "signature": {
+      "type": "object",
+      "required": ["algorithm", "key_id", "signature"],
+      "properties": {
+        "algorithm": { "type": "string" },
+        "key_id": { "type": "string" },
+        "signature": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
