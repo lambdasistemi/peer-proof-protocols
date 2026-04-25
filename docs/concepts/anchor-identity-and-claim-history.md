@@ -200,12 +200,21 @@ Redistributing every proof proactively is the wrong default because proofs are:
 - potentially large compared with the anchor
 - stale when roots or policies move
 
+New claim publication is different. If an author wants others to learn a new
+claim, endorsement, score, or certification, distributing that claim artifact is
+the author's push responsibility.
+
+Proof distribution should be pull-oriented only after another party already
+knows the claim and needs current evidence that the author still stands behind
+it.
+
 Instead, the default UX should be pull-oriented:
 
 ```text
-verifier or consumer needs claim C
-verifier sends proof request to the holder
-holder returns the minimal proof bundle for C
+author pushes or publishes claim C
+verifier or consumer later needs current proof for known claim C
+verifier sends proof request for C to the holder
+holder returns the minimal proof bundle or current status for C
 verifier resolves the anchor on-chain
 verifier checks the bundle against the current anchor state
 ```
@@ -220,7 +229,8 @@ A proof request should specify:
 
 ```text
 anchor identity
-claim or transition
+known claim references
+requested claim status or transition
 required positive facts
 required negative facts
 freshness bound
@@ -246,6 +256,11 @@ optional current out_ref hint
 If the holder cannot prove a required exclusion or freshness condition, the
 response should say so explicitly. The verifier then returns `incomplete` or
 `unsupported`, not `pass`.
+
+Requests that ask a peer to create a new claim, fill a partial claim, score a
+subject, or endorse someone else's claim are claim-authoring requests rather
+than proof requests. They create new state first; proof requests can verify that
+state later.
 
 ## Smart Contract Consumption
 

@@ -5,11 +5,17 @@ If proofs are pull-oriented, peers need a small language for asking for them.
 The request language should describe what the verifier needs, not how the
 holder stores its data.
 
+It is not a discovery mechanism. In the normal case, the requester already
+knows something from the past: a claim id, payload digest, event id, old proof
+bundle, certification id, or previous root. The request asks the holder to
+prove whether it still stands behind those known claims under its current
+anchor.
+
 The goal is:
 
 ```text
-given anchor A and transition T,
-return the minimal facts and proofs needed to evaluate T
+given anchor A, known claim references C, and transition T,
+return the minimal facts, proofs, and statuses needed to evaluate T
 ```
 
 ## Design Constraints
@@ -17,14 +23,49 @@ return the minimal facts and proofs needed to evaluate T
 A proof request must be:
 
 - specific enough that the holder knows what to disclose
+- explicit about which known claims are being revalidated
 - scoped enough to avoid over-disclosure
 - deterministic enough that different holders understand the same request
 - explicit about positive and negative evidence
 - explicit about freshness and policy
+- explicit about current-status outcomes
 - transport-neutral
 
 It should work over HTTP, wallet-to-wallet messages, DIDComm-like channels,
 local files, QR handoff, or any later protocol transport.
+
+## Claim Publication vs Proof Requests
+
+New claim distribution is a push responsibility of the author. The author
+publishes or sends claim artifacts, claim references, payload digests, and
+anchor identities to the parties that need to learn about them.
+
+Proof requests are different. They are pull-based revalidation requests for
+claims the requester already knows.
+
+A proof request should not mean:
+
+```text
+tell me what you claim about subject S
+```
+
+It should mean:
+
+```text
+I know claim C from a previous interaction.
+Prove that your current signed state still supports C,
+or return the current status of C.
+```
+
+This keeps application discovery outside PPP while making proof generation
+demand-driven. A claim can be announced through email, browser paste, package
+metadata, invoices, credentials, QR codes, or any other application transport.
+PPP starts when another party needs a portable proof that the known claim is
+still claimable under the holder's current anchor.
+
+Requests for someone to author a new position, score a subject, complete a
+partial claim, or endorse another claim are a separate lane. See
+[Claim Authoring And Endorsement](claim-authoring-and-endorsement.md).
 
 ## Request Envelope
 
@@ -36,7 +77,8 @@ request_version
 requester
 holder
 anchor_identity
-claim
+known_claims
+claim_status_request
 transition
 policy
 freshness
@@ -68,16 +110,41 @@ validator_version
 This tells the holder which claim history the verifier will resolve on-chain.
 It also lets the verifier reject a response that points to the wrong anchor.
 
-## Claim Or Transition
+## Known Claims
 
-The request should name the claim or transition being evaluated.
+The request should identify the claims the requester already knows.
 
 Examples:
 
 ```text
-claim: artifact D satisfies release policy P
+claim id
+payload digest
+event id
+certification id
+artifact digest
+shipment id
+previous root
+previous proof bundle digest
+subject plus fact type
+```
+
+The known-claim reference does not have to reveal the full payload if a digest
+or application identifier is enough for the holder to find the proof material.
+
+A request with no known claim references is an application-specific discovery
+query, not a PPP proof request. Applications may define discovery APIs, but PPP
+should not require holders to expose inventories of private state.
+
+## Claim Status Or Transition
+
+The request should name the known claim status or transition being evaluated.
+
+Examples:
+
+```text
+claim status: artifact D still satisfies release policy P
 transition: release_candidate -> releasable
-claim: shipment S has no active hold under policy P
+claim status: shipment S still has no active hold under policy P
 transition: custody_offered -> custody_accepted
 ```
 
@@ -188,6 +255,7 @@ response_version
 holder
 anchor_identity
 verification_context
+claim_statuses
 disclosed_facts
 inclusion_proofs
 exclusion_proofs
@@ -198,6 +266,24 @@ unsupported_requirements
 current_out_ref_hint
 signature
 ```
+
+For each known claim, the response should classify the current status:
+
+```text
+still_claimed
+revoked
+superseded
+not_currently_claimed
+unknown_claim
+cannot_prove
+not_authorized
+```
+
+`still_claimed` requires enough inclusion, exclusion, freshness, and history
+proofs for the verifier to check the requested policy. `not_currently_claimed`
+is only useful when the holder can prove the required exclusion or replacement
+state. `cannot_prove` is not a failure of honesty; it means the response does
+not satisfy the request.
 
 If the holder cannot satisfy the request, it should return a structured refusal
 or partial response:
@@ -225,6 +311,16 @@ not authorized
     "anchor_token_policy_id": "policy-id",
     "anchor_token_name": "token-name"
   },
+  "known_claims": [
+    {
+      "claim_id": "release-claim-123",
+      "fact_type": "build_succeeded",
+      "subject": "artifact-digest",
+      "payload_digest": "claim-payload-digest",
+      "previous_root": "old-root-hash",
+      "requested_status": "still_claimed"
+    }
+  ],
   "transition": {
     "from": "release_candidate",
     "to": "releasable",

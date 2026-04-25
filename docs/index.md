@@ -48,6 +48,8 @@ This repository focuses on the second case:
   for the Cardano UTxO discovery model.
 - Read [Proof Request Language](concepts/proof-request-language.md) for the
   pull-based protocol between verifiers and proof holders.
+- Read [Claim Authoring And Endorsement](concepts/claim-authoring-and-endorsement.md)
+  for partial claims, scoring prompts, and endorsement requests.
 - Use [Fit Rubric](concepts/fit-rubric.md) before spending time on a candidate.
 - Browse [Candidates](candidates/index.md) for concrete targets.
 - Active Spec Kit artifacts live in
