@@ -41,6 +41,37 @@ That is enough for many bilateral flows, but it is weak when disputes depend on
 publication time, latest-known state, or whether a peer showed different roots
 to different counterparties.
 
+### No External Clock, No Reliable Timestamp
+
+A signed root has no credible time by itself.
+
+It proves:
+
+```text
+peer P signed root R
+```
+
+It does not prove:
+
+```text
+root R existed before deadline D
+```
+
+The peer can include a timestamp in the signed checkpoint, but that timestamp is
+still a peer-authored claim unless it is backed by an external publication
+event. In a dispute, this matters because a peer could construct an old-looking
+root after the fact and claim it represented its earlier state.
+
+So the honest rule is:
+
+```text
+without a public ledger or trusted witness, a root's timestamp is not
+independently provable
+```
+
+Off-chain signed roots are useful for authorship and proof verification. They
+are not enough for strong "this was my state before time T" claims.
+
 ## What Changes On-Chain
 
 Anchoring a peer root on-chain turns a private or semi-public checkpoint into a
@@ -72,6 +103,17 @@ On-chain anchoring adds consensus ordering. A verifier can compare:
 - root `R1` came before root `R2`
 - certification root `C` came after its referenced input roots
 - a revocation root was published before or after a disputed bundle
+
+This does not prove perfect wall-clock time. It proves a more precise and
+useful claim:
+
+```text
+root R existed no later than ledger position L
+```
+
+If the protocol maps policy deadlines to ledger slots, blocks, or accepted
+publication windows, that ledger position becomes the external clock the
+verifier can use.
 
 On Cardano, transactions can carry metadata, and confirmed metadata is stored
 on-chain. Cardano transactions also have deterministic validation and validity
@@ -116,7 +158,22 @@ no later revocation root is relevant in scope S
 The verifier still needs the proof bundle, but no longer depends only on the
 claimer to tell them which root was current.
 
-### 5. Certifications Become Reusable Public Milestones
+### 6. Backdating Becomes Expensive Or Impossible
+
+The main timestamp value is not that a blockchain is a perfect clock. It is
+that a peer cannot cheaply publish a root after an event and later pretend the
+root was public before the event.
+
+The verifier can ask:
+
+```text
+where was root R externally published before deadline D?
+```
+
+If the answer is "nowhere", then the root may still be signed, but it is weak
+evidence for a past state claim.
+
+### 7. Certifications Become Reusable Public Milestones
 
 PPP composition says that a verified bundle can become a new certification
 fact.
@@ -207,6 +264,55 @@ This is the useful split:
 
 The verifier does not rebuild the peer database and does not trust a registry
 to interpret the facts.
+
+## Opaque Roots And Protocol Transitions
+
+Merkle roots are intentionally opaque. A verifier cannot look at a root and see
+which facts are inside it.
+
+That means a protocol transition cannot be justified by positive facts alone.
+The transition must define every fact that must be included and every blocking
+fact that must be excluded.
+
+The basic rule is:
+
+```text
+not disclosed != absent
+```
+
+For a transition to be accepted, the proof bundle must carry the evidence the
+transition contract requires.
+
+```text
+Transition: state A -> state B
+Required positive facts: inclusion proofs for facts that must exist
+Required negative facts: exclusion proofs for facts that must not exist
+Accepted roots: which peer roots and epochs can support the transition
+Freshness bound: how recent the roots must be
+Exclusion scope: which committed key space absence is checked against
+Unsupported exclusion result: usually incomplete or unsupported, not pass
+```
+
+For example, a software release transition might require:
+
+```text
+include build_succeeded(artifact D)
+include tests_passed(artifact D)
+include scan_completed(artifact D)
+include publisher_approved(artifact D)
+exclude revoked(artifact D)
+exclude active_release_hold(artifact D)
+exclude failed_required_test(artifact D)
+exclude critical_vulnerability_above_threshold(artifact D)
+```
+
+If the verifier only receives the positive facts, the release transition is not
+proven. It is merely a selective story. The negative facts must either be
+excluded against a committed peer key space or the transition must be reported
+as incomplete or unsupported.
+
+This is why PPP specs need transition evidence contracts. They turn an opaque
+root into a usable state-machine boundary.
 
 ## Why This Scales
 

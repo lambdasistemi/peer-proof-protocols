@@ -49,3 +49,30 @@ Protocols often need different combinations:
 
 The distinction should be made early, because it changes the proof shape and
 the protocol cost.
+
+## State Transitions Need Negative Evidence
+
+A Merkle root is opaque. A verifier cannot inspect it to see what the peer did
+not disclose.
+
+So protocol transitions must say which positive and negative claims are needed.
+
+For every transition, specify:
+
+- required inclusion proofs
+- required exclusion proofs
+- the committed key space for each exclusion
+- freshness requirements for the roots
+- the verifier outcome when exclusion is unsupported
+
+The safe default is:
+
+```text
+missing exclusion proof => incomplete or unsupported
+```
+
+It must not mean:
+
+```text
+missing blocking fact => no blocking fact exists
+```
