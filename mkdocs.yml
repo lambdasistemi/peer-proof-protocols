@@ -69,6 +69,11 @@ nav:
       - Anchor Identity And Claim History: concepts/anchor-identity-and-claim-history.md
   - Candidate Protocols:
       - Research Pipeline: protocols/index.md
+      - Protocol Blueprints:
+          - Supply Chain Traceability: protocols/supply-chain-traceability.md
+          - Software Release Provenance: protocols/software-release-provenance.md
+          - Credential Status: protocols/credential-status.md
+          - Milestone Settlement: protocols/milestone-settlement.md
       - Candidate Overview: candidates/index.md
       - Supply Chain and Trade:
           - GS1 EPCIS: candidates/gs1-epcis/index.md

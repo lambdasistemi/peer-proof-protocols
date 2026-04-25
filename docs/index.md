@@ -91,6 +91,13 @@ The active peer-only specs are:
 - [GS1 EPCIS Peer Traceability Proofs](https://github.com/lambdasistemi/peer-proof-protocols/blob/main/specs/002-gs1-epcis-peer-traceability/spec.md)
 - [in-toto Peer Provenance Proofs](https://github.com/lambdasistemi/peer-proof-protocols/blob/main/specs/003-in-toto-peer-provenance/spec.md)
 
+The first reusable protocol blueprints are:
+
+- [Supply Chain Traceability](protocols/supply-chain-traceability.md)
+- [Software Release Provenance](protocols/software-release-provenance.md)
+- [Credential Status](protocols/credential-status.md)
+- [Milestone Settlement](protocols/milestone-settlement.md)
+
 The earlier GitHub approvals work remains in `specs/001-*` as historical
 context. It represents the oracle/registry direction that this repository moved
 away from.

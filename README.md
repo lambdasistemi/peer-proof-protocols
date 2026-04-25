@@ -96,6 +96,13 @@ Active peer-only feature specs:
 - `specs/002-gs1-epcis-peer-traceability/`
 - `specs/003-in-toto-peer-provenance/`
 
+Initial reusable protocol blueprints:
+
+- `docs/protocols/supply-chain-traceability.md`
+- `docs/protocols/software-release-provenance.md`
+- `docs/protocols/credential-status.md`
+- `docs/protocols/milestone-settlement.md`
+
 The earlier `specs/001-github-approval-receipts/` work is kept as historical
 context for the oracle/registry direction that this repository moved away from.
 
