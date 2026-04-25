@@ -42,6 +42,8 @@ This repository focuses on the second case:
   for the proof vocabulary.
 - Read [Composition and Certification](concepts/composition-and-certification.md)
   for the reusable protocol pattern.
+- Read [On-Chain Root Anchoring](concepts/on-chain-root-anchoring.md) for how
+  the trust layer changes when peer roots move to a ledger.
 - Use [Fit Rubric](concepts/fit-rubric.md) before spending time on a candidate.
 - Browse [Candidates](candidates/index.md) for concrete targets.
 - Active Spec Kit artifacts live in
