@@ -228,6 +228,9 @@ policy id and version
 desired disclosure limits
 ```
 
+The request format should be explicit enough to become a transport-neutral
+language. See [Proof Request Language](proof-request-language.md).
+
 The response should include:
 
 ```text

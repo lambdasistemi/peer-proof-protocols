@@ -57,6 +57,7 @@ nav:
       - Trust Model: concepts/trust-model.md
       - On-Chain Root Anchoring: concepts/on-chain-root-anchoring.md
       - Anchor Identity And Claim History: concepts/anchor-identity-and-claim-history.md
+      - Proof Request Language: concepts/proof-request-language.md
       - Fit Rubric: concepts/fit-rubric.md
   - Patterns:
       - Base Facts and Proof Bundles: patterns/base-facts-and-proof-bundles.md
