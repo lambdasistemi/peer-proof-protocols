@@ -77,7 +77,7 @@ are not enough for strong "this was my state before time T" claims.
 Anchoring a peer root on-chain turns a private or semi-public checkpoint into a
 public ledger event.
 
-The trust layer changes in five main ways.
+The trust layer changes in seven main ways.
 
 ### 1. Publication Becomes Public
 
@@ -158,7 +158,7 @@ no later revocation root is relevant in scope S
 The verifier still needs the proof bundle, but no longer depends only on the
 claimer to tell them which root was current.
 
-### 6. Backdating Becomes Expensive Or Impossible
+### 5. Backdating Becomes Expensive Or Impossible
 
 The main timestamp value is not that a blockchain is a perfect clock. It is
 that a peer cannot cheaply publish a root after an event and later pretend the
@@ -173,7 +173,7 @@ where was root R externally published before deadline D?
 If the answer is "nowhere", then the root may still be signed, but it is weak
 evidence for a past state claim.
 
-### 7. Certifications Become Reusable Public Milestones
+### 6. Certifications Become Reusable Public Milestones
 
 PPP composition says that a verified bundle can become a new certification
 fact.
@@ -188,6 +188,17 @@ If the certifier's root is anchored on-chain, downstream users can cite:
 
 This makes certified results easier to reuse across customers, audits,
 settlement, and delayed disputes.
+
+### 7. Current Claim Histories Become Discoverable
+
+For each owner public key, namespace, and scope, the peer can publish one
+canonical claim-history anchor. The current anchor UTxO is discovered by the
+unique state token that identifies that history.
+
+The chain does not store every claim. It stores the current commitment to the
+owner's append-only history of claim roots.
+
+See [Anchor Identity And Claim History](anchor-identity-and-claim-history.md).
 
 ## What Does Not Change
 
@@ -359,23 +370,38 @@ This is simple and cheap. It gives public timestamping and durable discovery,
 but the ledger does not enforce much about root evolution unless additional
 scripts or policies are used.
 
-### Scripted Root State
+### Scripted Claim-History State
 
-A peer namespace can be represented by a UTxO carrying the latest root in a
-datum. Spending that UTxO publishes the next root.
+A peer namespace and scope can be represented by a UTxO carrying the current
+claim-history state in a datum. Spending that UTxO publishes the next claim
+root or claim-history event.
+
+The canonical UTxO should be identified by a unique anchor token:
+
+```text
+owner public key + namespace + scope -> anchor token -> current anchor UTxO
+```
+
+The token is minted once for the anchor identity and preserved across every
+valid update. Anyone can send junk UTxOs to the same script address, but they
+cannot forge the anchor token.
 
 The validator can require:
 
 - the authorized peer key or policy witness
+- preservation of the anchor token
 - a monotonic sequence number
-- a reference to the previous root
-- allowed scope or namespace
+- a valid append to the claim-history root
+- preserved owner, namespace, and scope
 - validity interval constraints
 - optional revocation or key-rotation rules
 
 This is stronger than metadata-only publication because the chain enforces part
 of the root lifecycle. It still does not validate hidden leaves or facts; it
 validates the publication rules for roots.
+
+For the full discovery model, see
+[Anchor Identity And Claim History](anchor-identity-and-claim-history.md).
 
 ## Trust-Layer Ladder
 
@@ -387,7 +413,7 @@ PPP can grow through layers:
 | Off-chain signed roots | Peer-owned state and proof bundles | Public ordering and global discovery |
 | Public witness feeds | Better availability and timestamping | Consensus finality or enforced updates |
 | On-chain metadata roots | Public durable ordering of roots | Enforced lifecycle rules |
-| Scripted on-chain root state | Enforced root update policy | Truth of hidden off-chain facts |
+| Scripted claim-history anchors | Enforced append-only root history | Truth of hidden off-chain facts |
 | Certification roots on-chain | Reusable public composed results | Automatic trust in the certifier |
 
 The chain should be treated as a narrow settlement and publication layer. It is
@@ -398,6 +424,10 @@ not the peer, not the verifier, and not the oracle.
 For PPP specs, on-chain readiness means every protocol should eventually define:
 
 - the peer namespace committed on-chain
+- the claim scope committed on-chain
+- the anchor identity distributed to verifiers
+- the anchor token policy and token name
+- the claim-history event format
 - the root publication payload
 - whether roots are metadata-only or script-governed
 - root sequence and supersession rules
