@@ -7,6 +7,8 @@ Use this sheet before opening a full spec.
 - Protocol name:
 - Domain:
 - Short description:
+- One-sentence value proposition:
+- Standards-backed candidate or internal sketch:
 
 ## Peers
 
@@ -27,6 +29,8 @@ Use this sheet before opening a full spec.
 - Inclusion needed?
 - Exclusion needed?
 - Completeness needed?
+- Freshness or timestamp needed?
+- Revocation or supersession needed?
 
 ## Composition
 
@@ -34,6 +38,22 @@ Use this sheet before opening a full spec.
 - Do those higher-order claims become certification facts?
 - Which downstream mode applies: `trust certifier`, `audit through`, or
   `mixed`?
+
+## Software Role
+
+- Safest role for us:
+- Risky role to avoid:
+- IP, license, governance, or accreditation concern:
+
+## Infrastructure Path
+
+- Signed roots only?
+- Witness feed?
+- On-chain metadata roots?
+- Scripted claim-history anchor?
+- Who stores proofs?
+- Who receives proof requests?
+- What must travel in the proof bundle?
 
 ## Fit Rubric Score
 
@@ -52,4 +72,5 @@ Use this sheet before opening a full spec.
 
 - Why this is a good fit:
 - Why this may not be worth it:
+- What has to be researched next:
 - Next step:
