@@ -49,23 +49,27 @@ markdown_extensions:
       custom_checkbox: true
 
 nav:
-  - Home: index.md
-  - Concepts:
+  - Proposal:
+      - Overview: index.md
+      - Value Proposition: proposal/value-proposition.md
+      - Research Method: proposal/research-method.md
+  - Protocol Model:
       - Why Signed State: concepts/why-signed-state.md
       - Inclusion, Exclusion, Completeness: concepts/inclusion-exclusion-completeness.md
       - Composition and Certification: concepts/composition-and-certification.md
-      - Trust Model: concepts/trust-model.md
-      - On-Chain Root Anchoring: concepts/on-chain-root-anchoring.md
-      - Anchor Identity And Claim History: concepts/anchor-identity-and-claim-history.md
       - Proof Request Language: concepts/proof-request-language.md
       - Claim Authoring And Endorsement: concepts/claim-authoring-and-endorsement.md
-      - Fit Rubric: concepts/fit-rubric.md
-  - Patterns:
       - Base Facts and Proof Bundles: patterns/base-facts-and-proof-bundles.md
       - Certification Facts: patterns/certification-facts.md
       - Audit Through vs Trust Certifier: patterns/audit-through-vs-trust-certifier.md
-  - Candidates:
-      - Overview: candidates/index.md
+  - Infrastructure:
+      - Overview: infrastructure/index.md
+      - Trust Model: concepts/trust-model.md
+      - On-Chain Root Anchoring: concepts/on-chain-root-anchoring.md
+      - Anchor Identity And Claim History: concepts/anchor-identity-and-claim-history.md
+  - Candidate Protocols:
+      - Research Pipeline: protocols/index.md
+      - Candidate Overview: candidates/index.md
       - Supply Chain and Trade:
           - GS1 EPCIS: candidates/gs1-epcis/index.md
           - DCSA Track and Trace: candidates/dcsa-track-and-trace/index.md
@@ -83,5 +87,11 @@ nav:
       - Protocol Families:
           - Compliance Audit-Signoff: candidates/compliance-audit-signoff/index.md
           - Dispute Resolution: candidates/dispute-resolution/index.md
-  - Worksheets:
+      - Internal Sketches:
+          - Software Provenance: candidates/software-provenance/index.md
+          - Milestone Settlement: candidates/milestone-settlement/index.md
+          - Custody Handoff: candidates/custody-handoff/index.md
+          - Credential Lifecycle: candidates/credential-lifecycle/index.md
+  - Evaluation:
+      - Fit Rubric: concepts/fit-rubric.md
       - Protocol Evaluation Sheet: worksheets/protocol-evaluation-sheet.md

@@ -46,6 +46,6 @@ peer-side EPCIS toolkit and verifier, not a GS1 conformance body.
 
 ## Sources
 
-- [EPCIS & CBV | GS1](https://www.gs1.org/standards/epcis)
+- [EPCIS & CBV | GS1](https://ref.gs1.org/standards/epcis/)
 - [GS1 Intellectual Property Policy](https://ref.gs1.org/gs1/ip-policy/)
 - [GS1 FAQ on the IP Policy](https://support.gs1.org/support/solutions/articles/43000734458-how-can-i-learn-about-the-gs1-intellectual-property-ip-policy-)

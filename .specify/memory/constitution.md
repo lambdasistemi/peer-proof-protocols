@@ -1,21 +1,17 @@
 <!--
 Sync Impact Report
-Version change: 3.0.0 -> 3.1.0
+Version change: 3.1.0 -> 3.1.1
 Modified principles:
-- IV. Peer-Carried Proof Bundles -> IV. Peer-Carried Proof Bundles and Certifications
+- None
 Modified sections:
-- Composition & Certification
-- Product Scope & Non-Goals
-- Delivery Workflow & Quality Gates
+- Title and repository naming
+- Product Scope & Non-Goals clarification
 Templates requiring updates:
-- ✅ updated /code/verifiable-receipts-registry/.specify/templates/plan-template.md
-- ✅ updated /code/verifiable-receipts-registry/.specify/templates/spec-template.md
-- ✅ updated /code/verifiable-receipts-registry/.specify/templates/tasks-template.md
+- None
 Follow-up TODOs:
-- Re-home centralized oracle features into a separate repository when they no
-  longer fit this constitution.
+- None
 -->
-# Verifiable Receipts Registry Constitution
+# Peer Proof Protocols Constitution
 
 ## Core Principles
 
@@ -63,9 +59,10 @@ trust is a protocol bug, not a documentation detail.
 
 ## Product Scope & Non-Goals
 
-The primary repository outputs are protocol specifications, peer models,
-canonical schemas, proof bundle formats, verifier rules, and reference flows
-for MPF/MPFS-native peer applications in which each peer authors its own tree.
+The primary repository outputs are a research proposal, protocol
+specifications, peer models, canonical schemas, proof bundle formats, verifier
+rules, and reference flows for MPF/MPFS-native peer applications in which each
+peer authors its own tree.
 
 Non-goals for the first product generations:
 
@@ -166,4 +163,4 @@ Compliance expectations:
   formats MUST include deterministic fixture and verification work
 - exceptions MUST be written down, time-boxed, and approved before work starts
 
-**Version**: 3.1.0 | **Ratified**: 2026-04-23 | **Last Amended**: 2026-04-24
+**Version**: 3.1.1 | **Ratified**: 2026-04-23 | **Last Amended**: 2026-04-25

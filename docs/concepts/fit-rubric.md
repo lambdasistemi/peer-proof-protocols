@@ -1,5 +1,9 @@
 # Fit Rubric
 
+Use this rubric to decide whether a candidate deserves deeper research. It is
+not a market score. It measures whether Merkle-authenticated peer state changes
+the trust model enough to justify the complexity.
+
 Score each question `0`, `1`, or `2`.
 
 ## Questions
@@ -50,6 +54,14 @@ Score each question `0`, `1`, or `2`.
 - `7-10`: maybe
 - `11-13`: strong fit
 - `14-16`: excellent fit
+
+Before advancing a candidate, pair the score with:
+
+- a one-sentence value proposition
+- the safest software role
+- the main legal, governance, or operational risk
+- the infrastructure layer needed: signed roots, witness feed, metadata
+  anchoring, or scripted claim-history anchors
 
 ## Shortcut
 
