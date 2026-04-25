@@ -46,6 +46,8 @@ This repository focuses on the second case:
   the trust layer changes when peer roots move to a ledger.
 - Read [Anchor Identity And Claim History](concepts/anchor-identity-and-claim-history.md)
   for the Cardano UTxO discovery model.
+- Read [Proof Request Language](concepts/proof-request-language.md) for the
+  pull-based protocol between verifiers and proof holders.
 - Use [Fit Rubric](concepts/fit-rubric.md) before spending time on a candidate.
 - Browse [Candidates](candidates/index.md) for concrete targets.
 - Active Spec Kit artifacts live in
