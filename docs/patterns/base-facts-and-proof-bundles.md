@@ -32,6 +32,17 @@ A verifier should be able to:
 
 without needing the full peer log.
 
+## Distribution Pattern
+
+Proof bundles should usually be requested, not broadcast.
+
+The public anchor lets a verifier find the relevant on-chain root state. The
+proof bundle is then pulled from the holder for a specific claim or protocol
+transition.
+
+This avoids pushing every possible proof to every possible verifier, and it
+keeps disclosure scoped to the policy being evaluated.
+
 ## Common Mistake
 
 Do not confuse:

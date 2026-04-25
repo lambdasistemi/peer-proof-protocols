@@ -188,6 +188,62 @@ use the UTxO as a reference input
 The current `out_ref` may be included in the bundle for convenience, but it is
 only a hint. The token is the stable locator.
 
+## Proof Distribution Is Pull-Oriented
+
+The anchor is public. The proofs are not automatically public.
+
+Redistributing every proof proactively is the wrong default because proofs are:
+
+- claim-specific
+- transition-specific
+- sometimes privacy-sensitive
+- potentially large compared with the anchor
+- stale when roots or policies move
+
+Instead, the default UX should be pull-oriented:
+
+```text
+verifier or consumer needs claim C
+verifier sends proof request to the holder
+holder returns the minimal proof bundle for C
+verifier resolves the anchor on-chain
+verifier checks the bundle against the current anchor state
+```
+
+The holder may be the producer, claimant, certifier, wallet, agent, or any party
+that already possesses the facts and can compute or cache the relevant proofs.
+Once a proof bundle is disclosed, it is portable and can be relayed by others,
+but the protocol should not require the producer to push every possible proof to
+every possible verifier.
+
+A proof request should specify:
+
+```text
+anchor identity
+claim or transition
+required positive facts
+required negative facts
+freshness bound
+policy id and version
+desired disclosure limits
+```
+
+The response should include:
+
+```text
+disclosed facts
+inclusion proofs
+exclusion proofs
+claim-root proof
+claim-history proof
+policy metadata
+optional current out_ref hint
+```
+
+If the holder cannot prove a required exclusion or freshness condition, the
+response should say so explicitly. The verifier then returns `incomplete` or
+`unsupported`, not `pass`.
+
 ## Smart Contract Consumption
 
 A consuming protocol validator can use the anchor UTxO as a reference input.
