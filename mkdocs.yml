@@ -73,6 +73,7 @@ nav:
           - Supply Chain Traceability: protocols/supply-chain-traceability.md
           - Software Release Provenance: protocols/software-release-provenance.md
           - Credential Status: protocols/credential-status.md
+          - Endorsement With Revocation: protocols/endorsement-with-revocation.md
           - Milestone Settlement: protocols/milestone-settlement.md
       - Candidate Overview: candidates/index.md
       - Supply Chain and Trade:
