@@ -140,6 +140,90 @@ A simple version can ship without ZK. The author then sees consume
 events but not necessarily reader identity, depending on the key custody
 choice.
 
+## Daydream — Atomic Key-for-ADA Exchange
+
+This section is daydreaming, not planning. None of it is required for a
+v1, or even a v2. It is recorded so the design space stays visible.
+
+The fantasy: a Cardano validator atomically exchanges ADA for a
+per-article decryption key, with a cryptographic guarantee that the key
+actually decrypts the ciphertext the reader is paying for. No keepers,
+no trusted publisher, no off-chain dance.
+
+Three approaches in the literature are worth naming.
+
+### Zero-Knowledge Contingent Payment (ZKCP)
+
+Demonstrated by Maxwell, Poelstra, and Wuille on Bitcoin in 2016 (the
+"Sudoku for Bitcoin" demo). Shape:
+
+```text
+1. author publishes ciphertext C and a ZK proof:
+   "I know K such that decrypt(C, K) has digest D and hash(K) = H"
+2. reader posts a Cardano script:
+   "pay author iff redeemer R satisfies hash(R) = H"
+3. author claims ADA by revealing K in the spending tx
+4. reader extracts K from the chain and decrypts C locally
+```
+
+The validator never sees `K` until step 3 and only releases ADA when
+`K` is revealed. The ZK proof from step 1 is what binds the released key
+to the right ciphertext; without it the seller could publish any
+preimage and steal the payment.
+
+Costs:
+
+- proof generation at issuance is heavy (Groth16 or Plonk over a
+  decryption circuit plus hash openings); minutes per bundle is a
+  realistic order of magnitude
+- requires SNARK-friendly primitives (Poseidon hash, ChaCha20-style or
+  AES-in-SNARK encryption)
+
+### Adaptor Signatures Plus Issuance-Time ZK
+
+Adaptor signatures (Poelstra, "scriptless scripts") use Schnorr-like
+algebra to atomically swap a payment for a secret without a SNARK at
+consume time. Cardano has Schnorr (secp256k1) and EdDSA primitives in
+Plutus, so this is feasible.
+
+The tradeoff: adaptor signatures bind a payment to a secret but do not
+prove what that secret decrypts. So this approach pairs:
+
+- one issuance-time ZK proof binding all `K_i` to all `C_i`
+- cheap per-consume adaptor-signature swaps
+
+Cleaner separation of concerns than ZKCP-per-consume, and lighter at
+the consume step.
+
+### Witness Encryption
+
+The dream primitive: encrypt `K` such that anyone holding a valid
+proof of payment can decrypt. Currently impractical at scale.
+Mentioned only for completeness.
+
+### Why This Is Daydreaming
+
+- proof generation at issuance is in the minutes range, which pushes
+  the model toward "publish a long-lived bundle once, sell many reads"
+  — a real product constraint, not a deal-breaker, but not free
+- the per-consume on-chain dance is only economic on Hydra L2, not on
+  L1; see decision 1 above
+- a v0 will use a trusted publisher or threshold keepers, not any of
+  this
+- but the architecture should not foreclose these options. The four
+  decisions above remain compatible with adopting ZKCP or adaptor
+  signatures later if the cryptography matures and the product needs
+  the trust reduction
+
+External references worth a search rather than a fragile link:
+
+- Maxwell, Poelstra, Wuille — "Zero-Knowledge Contingent Payments"
+  (Bitcoin, 2016)
+- Poelstra — "Scriptless Scripts" / adaptor signatures (Bitcoin
+  scaling notes, 2017–)
+- [Hydra Head Protocol](https://hydra.family/head-protocol/) — the
+  Cardano L2 path that makes per-consume on-chain dances economic
+
 ## What Is Parked
 
 - `pre-decision query privacy`: querying truth-axis facts for CID X
