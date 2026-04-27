@@ -78,6 +78,7 @@ research and product design.
 | --- | --- | --- | --- | --- |
 | [Compliance Audit-Signoff](compliance-audit-signoff/index.md) | Strong | Evidence workflow and certification tooling | Low | Regulatory and marketing claims |
 | [Dispute Resolution](dispute-resolution/index.md) | Strong | Evidence bundle and arbitrator tooling | Low | Legal-service and evidence-handling obligations |
+| [Independent Journalism](independent-journalism/index.md) | Strong | Endorsement and verification toolkit, not registry | Low | Becoming a centralized arbiter of journalistic legitimacy |
 
 ## Internal Sketches
 
