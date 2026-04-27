@@ -63,6 +63,7 @@ nav:
       - Base Facts and Proof Bundles: patterns/base-facts-and-proof-bundles.md
       - Certification Facts: patterns/certification-facts.md
       - Audit Through vs Trust Certifier: patterns/audit-through-vs-trust-certifier.md
+      - Per-Author Entitlements (sketch): concepts/per-author-entitlements.md
   - Infrastructure:
       - Overview: infrastructure/index.md
       - Trust Model: concepts/trust-model.md
