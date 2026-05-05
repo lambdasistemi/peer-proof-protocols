@@ -115,5 +115,5 @@ nix develop github:paolino/dev-assets?dir=mkdocs --quiet -c mkdocs serve
 Pull request previews are deployed to:
 
 ```text
-https://lambdasistemi-peer-proof-protocols-pr-PR_NUMBER.surge.sh
+https://preview.dev.plutimus.com/lambdasistemi/peer-proof-protocols/pr-PR_NUMBER/
 ```

@@ -17,6 +17,8 @@ env:
 
 permissions:
   contents: read
+  issues: write
+  pull-requests: write
 
 jobs:
   build-docs:
@@ -35,55 +37,32 @@ jobs:
           path: site
           if-no-files-found: error
 
-  surge-preview:
-    name: Surge Preview
+  shared-preview:
+    name: Shared Preview
     if: >-
       github.event_name == 'pull_request' &&
       github.event.action != 'closed'
     needs: build-docs
     runs-on: nixos
-    env:
-      SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
-      SURGE_DOMAIN: lambdasistemi-peer-proof-protocols-pr-${{ github.event.pull_request.number }}.surge.sh
     steps:
-      - name: Preview disabled
-        if: env.SURGE_TOKEN == ''
-        run: |
-          echo "SURGE_TOKEN is not configured; skipping Surge preview." >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/download-artifact@v8
-        if: env.SURGE_TOKEN != ''
         with:
           name: docs-site
           path: site
-      - name: Publish preview
-        if: env.SURGE_TOKEN != ''
-        run: |
-          nix shell nixpkgs#nodePackages.surge --quiet \
-            -c surge ./site "$SURGE_DOMAIN" --token "$SURGE_TOKEN"
-      - name: Preview summary
-        if: env.SURGE_TOKEN != ''
-        run: |
-          echo "Preview: https://$SURGE_DOMAIN" >> "$GITHUB_STEP_SUMMARY"
+      - uses: paolino/dev-assets/static-preview@main
+        with:
+          path: site
 
-  surge-teardown:
-    name: Remove Surge Preview
+  shared-preview-cleanup:
+    name: Remove Shared Preview
     if: >-
       github.event_name == 'pull_request' &&
       github.event.action == 'closed'
     runs-on: nixos
-    env:
-      SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
-      SURGE_DOMAIN: lambdasistemi-peer-proof-protocols-pr-${{ github.event.pull_request.number }}.surge.sh
     steps:
-      - name: Preview teardown skipped
-        if: env.SURGE_TOKEN == ''
-        run: |
-          echo "SURGE_TOKEN is not configured; no Surge preview to remove." >> "$GITHUB_STEP_SUMMARY"
-      - name: Remove preview
-        if: env.SURGE_TOKEN != ''
-        run: |
-          nix shell nixpkgs#nodePackages.surge --quiet \
-            -c surge teardown "$SURGE_DOMAIN" --token "$SURGE_TOKEN" || true
+      - uses: paolino/dev-assets/static-preview@main
+        with:
+          mode: cleanup
 
   pages-artifact:
     name: Package Pages Artifact
