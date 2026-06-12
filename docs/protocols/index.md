@@ -67,6 +67,7 @@ These are useful domains but not one externally governed protocol:
 
 - [Compliance Audit-Signoff](../candidates/compliance-audit-signoff/index.md)
 - [Dispute Resolution](../candidates/dispute-resolution/index.md)
+- [Independent Journalism](../candidates/independent-journalism/index.md)
 
 ### Internal sketches
 
