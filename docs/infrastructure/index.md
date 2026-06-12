@@ -11,6 +11,25 @@ public infrastructure anchors roots and ordering
 verifiers check disclosed slices against those roots
 ```
 
+```mermaid
+flowchart TB
+    subgraph OffChain["Off-chain peer layer"]
+        PF[Peer facts:<br/>canonical leaves] --> PB[Proof bundles:<br/>inclusion + exclusion]
+        PB --> CF[Certification facts:<br/>reusable derived outcomes]
+    end
+
+    subgraph Public["Public infrastructure"]
+        PUB[Publication layer:<br/>timestamping + ordering] --> ANCH[Claim-history anchors:<br/>Cardano anchor UTxO]
+    end
+
+    PF -. "signed roots" .-> PUB
+    PB -- "disclosed slice" --> VERIF{Verifier:<br/>browser / CLI / API / contract}
+    CF -- "trust certifier / audit through" --> VERIF
+    ANCH -. "root history + freshness" .-> VERIF
+```
+
+The layers below map one-to-one onto this diagram.
+
 ## Layer Map
 
 | Layer | Responsibility | Main Documentation |
